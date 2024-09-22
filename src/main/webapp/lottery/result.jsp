@@ -9,7 +9,7 @@
 <body>
 <div class="container">
 	<h1>生成結果</h1>
-	<p>排除數字 ${ excludeNumber }</p>
+	<p class="lead">排除數字 ${ excludeNumber }</p>
 	<% ArrayList<Integer>[] lotteryArray = (ArrayList<Integer>[]) request.getAttribute("lotterys"); %>
 	<table class="table table-hover">
 		<thead>
@@ -28,8 +28,13 @@
 		<%}%>
 		</tbody>
 	</table>
+	<a href="<%=request.getContextPath()%>/lottery/main.jsp">
+		<button class="btn btn btn-secondary">再生成一次</button>
+	</a>
+	<a href="<%=request.getContextPath()%>">
+		<button class="btn btn-primary">回首頁</button>
+	</a>
 
 </div>
-
 
 </body>

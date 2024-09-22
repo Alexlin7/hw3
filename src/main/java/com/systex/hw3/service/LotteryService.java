@@ -2,7 +2,6 @@ package com.systex.hw3.service;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
 
 public class LotteryService {
 	
@@ -19,17 +18,19 @@ public class LotteryService {
 		return lottery;
 	}
 
-	public static HashSet<Integer> parseExcludeNum(String excludeNumString, HashSet<Integer> excludeNumberSet) {
+	public static void parseExcludeNum(String excludeNumString, HashSet<Integer> excludeNumberSet) {
 		String[] numberStrings = excludeNumString.split(" ");
 		for (String num : numberStrings) {
 			try {
+				if (num.contains("-")) {
+					throw new IllegalArgumentException("您所輸入的排除數字有負數");
+				}
 				excludeNumberSet.add(Integer.parseInt(num.trim()));
 			} catch (NumberFormatException e) {
 				throw new IllegalArgumentException("您所輸入的排除數字似乎有非數字的值");
 			}
 			
 		}
-		return excludeNumberSet;
 	}
 
 }

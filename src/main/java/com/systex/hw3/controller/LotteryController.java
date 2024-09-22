@@ -1,22 +1,24 @@
 package com.systex.hw3.controller;
 
+import com.systex.hw3.service.LotteryService;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Optional;
 
-import com.systex.hw3.service.LotteryService;
-
 /**
  * Servlet implementation class LotteryController
  */
 public class LotteryController extends HttpServlet {
+	@Serial
 	private static final long serialVersionUID = 1L;
        
     /**
@@ -37,14 +39,18 @@ public class LotteryController extends HttpServlet {
 		request.setAttribute("errors", errorMessages);
 		HashSet<Integer> excludeNumberSet = new HashSet<>();
 		int group = 0;
-		ArrayList<Integer>[] lotterys;
+		ArrayList[] lotterys;
 		
 		//1. Retrieve Form Data
 		Optional<String> req = Optional.ofNullable(request.getParameter("group"));
 		
 		if (req.isPresent() && !req.get().isEmpty()) {
 			try {
-				group = Integer.parseInt(req.get());
+				if (req.get().contains("-")) {
+					errorMessages.add("您所輸入的組數為負數");
+				} else {
+					group = Integer.parseInt(req.get());
+				}
 			} catch (NumberFormatException e) {
 				errorMessages.add("您所輸入的組數並非為有效數字");
 			}
@@ -52,19 +58,15 @@ public class LotteryController extends HttpServlet {
 		} else {
 			errorMessages.add("您所輸入的組數為空");
 		}
-		
 
-		
 		req = Optional.ofNullable(request.getParameter("exclude"));
 		if (req.isPresent() && !req.get().isEmpty()) {
 			try {
-				excludeNumberSet = LotteryService.parseExcludeNum(req.get(), excludeNumberSet);
+				LotteryService.parseExcludeNum(req.get(), excludeNumberSet);
 			} catch (Exception e) {
 				errorMessages.add(e.getMessage());
 			}
 			
-		} else {
-			errorMessages.add("您所輸入的排除數字為空");
 		}
 		
 		if (!errorMessages.isEmpty()) {
